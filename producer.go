@@ -2,14 +2,16 @@ package main
 
 import (
 	"encoding/csv"
-	"fmt"
 	"os"
 )
 
 func loadRecipients(filePath string, ch chan Recipient) error {
+	defer close(ch)
+
 	f, err := os.Open(filePath)
 
 	if err != nil {
+
 		return err
 	}
 
@@ -23,7 +25,7 @@ func loadRecipients(filePath string, ch chan Recipient) error {
 	}
 
 	for _, record := range records[1:] {
-		fmt.Println(record)
+		// fmt.Println(record)
 		// send -> consumer -> channels
 		ch <- Recipient{
 			Name:  record[0],
